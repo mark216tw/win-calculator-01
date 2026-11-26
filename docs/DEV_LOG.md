@@ -4,6 +4,73 @@
 
 ---
 
+## 2026-11-26 - v1.6.1（極小模式再縮小）
+
+### 目標
+讓極小視窗模式更適合長時間常駐畫面角落：預設與最小尺寸再縮小，並精簡工具列與鍵盤。
+
+### 變更
+- `Views/MainWindow.xaml.cs`：極小模式預設 300×420 → 230×300、最小 260×380 → 190×250；新增舊尺寸（300×420、260×380）自動遷移為新預設。
+- `Views/MainWindow.xaml`：移除極小工具列的「極小模式」文字標籤；新增 28×28 的精簡圖示按鈕樣式，縮小工具列外距。
+- `Views/CompactView.xaml`：新增精簡按鍵樣式（字級 12／15、最小高度 22、間距 1）；縮小顯示區 padding、圓角、運算式與結果字級（13／22）。
+- `Directory.Build.props`：版本提升至 1.6.1（`AssemblyVersion` 維持 1.6.0.0）。
+- 文件同步更新 DESIGN、USER_GUIDE、CHANGELOG 與 RELEASE_NOTES。
+
+### 問題與解法
+- 既有使用者的 `CompactWindow` 會還原舊尺寸，看不到縮小效果；還原後若仍是舊預設或舊最小尺寸，改套用新預設，其餘自訂尺寸保留。
+- 190×250 高度緊繃，需同步壓縮工具列、顯示區與按鍵最小高度，避免底部鍵盤被裁切。
+
+### 待辦／已知限制
+- 190×250 為實機最小高度下限；若不同 DPI 或系統標題列較高造成裁切，需再微調按鍵高度。
+- 尚未建立 MSIX 安裝封裝。
+
+---
+
+## 2026-11-26 - v1.6.0（極小視窗模式）
+
+### 目標
+新增僅限標準模式使用的極小視窗模式，提供基本四則運算、自動置頂與精簡版面，方便長時間放在畫面上使用。
+
+### 變更
+- 新增 `Views/CompactView.xaml`、`Views/CompactView.xaml.cs`：顯示區與 4×5 精簡鍵盤，只保留數字、`.`、四則運算、`=`、`C`、`⌫`。
+- `Views/MainWindow.xaml`：拆分完整與極小工具列；標準模式顯示極小按鈕，科學模式完全隱藏；極小工具列提供置頂與返回標準模式。
+- `Views/MainWindow.xaml.cs`：新增極小模式切換、自動置頂與還原、獨立視窗位置保存、`Ctrl+M` 快捷鍵與模式切換防護。
+- `Helpers/WindowPlacementHelper.cs`：`Restore` 支援忽略最大化；新增極小模式預設邊界計算。
+- `Models/AppSettings.cs`、`Models/SettingsData.cs`、`Services/SettingsService.cs`：新增 `CompactWindow` 位置保存。
+- `Strings/Resources.resx`：新增 `App_CompactMode`、`App_ExpandMode`。
+- `Directory.Build.props`：版本提升至 1.6.0。
+- 文件同步更新 README、CHANGELOG、使用指南與設計文件。
+
+### 問題與解法
+- 極小模式只能從標準模式進入，且不能直接切換科學模式；以按鈕 Visibility、`Ctrl+M` 防護與模式變更攔截維持不變量。
+- 完整與極小視窗若共用同一組位置會互相覆蓋；改為各自保存 `Window` 與 `CompactWindow`。
+- 自動置頂若直接持久化會改變使用者設定；離開或關閉極小模式時還原進入前的 `AlwaysOnTop`。
+
+### 待辦／已知限制
+- 若程式在極小模式被強制終止，下次啟動可能保留自動置頂為開啟。
+- 視窗位置夾限仍以主要螢幕工作區為準，多螢幕不同工作區沿用既有行為。
+- 尚未建立 MSIX 安裝封裝。
+
+---
+
+## 2026-11-26 - v1.5.2（置頂按鈕圖示與配色）
+
+### 目標
+置頂功能啟用後不再以主題色填滿按鈕，只以圖示變化表示狀態。
+
+### 變更
+- `Styles/Controls.xaml`：`PinToggle` 移除 `IsChecked` 時的 `AccentBrush` 背景與 `AccentForegroundBrush` 前景，保留中性 hover 底色。
+- `Views/MainWindow.xaml`：置頂按鈕改由 Style Setter 設定圖示，未置頂為 `E718`（Pin）、置頂為 `E840`（Pinned，指針向下）。
+- `Directory.Build.props`：版本遞增為 1.5.2。
+
+### 問題與解法
+- 無。`dotnet build` 成功（0 警告／0 錯誤），`dotnet test` 77 項全數通過。
+
+### 待辦／已知限制
+- 置頂圖示目前採 `E840 Pinned`；若視覺上與 `E718` 差異不足，可改用 `E77A Unpin`。
+
+---
+
 ## 2026-11-26 - v1.5.1（文件與 x64/ARM64 發佈）
 
 ### 目標

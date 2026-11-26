@@ -10,6 +10,18 @@
         Foreground="{DynamicResource TextPrimaryBrush}"
         TextOptions.TextFormattingMode="Display"
         Topmost="{Binding Settings.AlwaysOnTop, Mode=TwoWay}">
+    <Window.Resources>
+        <Style x:Key="CompactIconButton" TargetType="Button" BasedOn="{StaticResource IconButton}">
+            <Setter Property="Width" Value="28" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="FontSize" Value="13" />
+        </Style>
+        <Style x:Key="CompactPinToggle" TargetType="ToggleButton" BasedOn="{StaticResource PinToggle}">
+            <Setter Property="Width" Value="28" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="FontSize" Value="13" />
+        </Style>
+    </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="Enter" Command="{Binding Calculator.EvaluateCommand}" />
         <KeyBinding Key="Escape" Command="{Binding Calculator.ClearAllCommand}" />
@@ -20,57 +32,97 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Margin="12,10,12,2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0">
+            <Grid x:Name="NormalToolbar" Margin="12,10,12,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBlock Text="{loc:Loc App_Title}"
-                           FontSize="16"
-                           FontWeight="SemiBold"
-                           VerticalAlignment="Center"
-                           Margin="4,0,16,0" />
-                <RadioButton GroupName="CalculatorMode"
-                             Style="{StaticResource ModeTab}"
-                             Content="{loc:Loc App_StandardMode}"
-                             IsChecked="{Binding IsStandardSelected, Mode=TwoWay}"
-                             Checked="OnStandardChecked" />
-                <RadioButton GroupName="CalculatorMode"
-                             Style="{StaticResource ModeTab}"
-                             Content="{loc:Loc App_ScientificMode}"
-                             IsChecked="{Binding IsScientificSelected, Mode=TwoWay}"
-                             Checked="OnScientificChecked" />
-            </StackPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="{loc:Loc App_Title}"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"
+                               Margin="4,0,16,0" />
+                    <RadioButton GroupName="CalculatorMode"
+                                 Style="{StaticResource ModeTab}"
+                                 Content="{loc:Loc App_StandardMode}"
+                                 IsChecked="{Binding IsStandardSelected, Mode=TwoWay}"
+                                 Checked="OnStandardChecked" />
+                    <RadioButton GroupName="CalculatorMode"
+                                 Style="{StaticResource ModeTab}"
+                                 Content="{loc:Loc App_ScientificMode}"
+                                 IsChecked="{Binding IsScientificSelected, Mode=TwoWay}"
+                                 Checked="OnScientificChecked" />
+                </StackPanel>
 
-            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                <ToggleButton Content="&#xE718;"
-                              IsChecked="{Binding Settings.AlwaysOnTop, Mode=TwoWay}">
-                    <ToggleButton.Style>
-                        <Style TargetType="ToggleButton" BasedOn="{StaticResource PinToggle}">
-                            <Setter Property="ToolTip" Value="{loc:Loc App_Pin}" />
-                            <Setter Property="AutomationProperties.Name" Value="{loc:Loc App_Pin}" />
-                            <Style.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter Property="ToolTip" Value="{loc:Loc App_Unpin}" />
-                                    <Setter Property="AutomationProperties.Name" Value="{loc:Loc App_Unpin}" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ToggleButton.Style>
-                </ToggleButton>
-                <Button Style="{StaticResource IconButton}"
-                        Content="&#xE81C;"
-                        Click="OnHistoryClick"
-                        ToolTip="{loc:Loc App_History}"
-                        AutomationProperties.Name="{loc:Loc App_History}" />
-                <Button Style="{StaticResource IconButton}"
-                        Content="&#xE713;"
-                        Click="OnSettingsClick"
-                        ToolTip="{loc:Loc App_Settings}"
-                        AutomationProperties.Name="{loc:Loc App_Settings}" />
-            </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Style="{StaticResource IconButton}"
+                            Content="&#xE73F;"
+                            Click="OnCompactClick"
+                            Visibility="{Binding IsStandardSelected, Converter={StaticResource BoolToVis}}"
+                            ToolTip="{loc:Loc App_CompactMode}"
+                            AutomationProperties.Name="{loc:Loc App_CompactMode}" />
+                    <ToggleButton IsChecked="{Binding Settings.AlwaysOnTop, Mode=TwoWay}">
+                        <ToggleButton.Style>
+                            <Style TargetType="ToggleButton" BasedOn="{StaticResource PinToggle}">
+                                <Setter Property="Content" Value="&#xE718;" />
+                                <Setter Property="ToolTip" Value="{loc:Loc App_Pin}" />
+                                <Setter Property="AutomationProperties.Name" Value="{loc:Loc App_Pin}" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter Property="Content" Value="&#xE840;" />
+                                        <Setter Property="ToolTip" Value="{loc:Loc App_Unpin}" />
+                                        <Setter Property="AutomationProperties.Name" Value="{loc:Loc App_Unpin}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+                    <Button Style="{StaticResource IconButton}"
+                            Content="&#xE81C;"
+                            Click="OnHistoryClick"
+                            ToolTip="{loc:Loc App_History}"
+                            AutomationProperties.Name="{loc:Loc App_History}" />
+                    <Button Style="{StaticResource IconButton}"
+                            Content="&#xE713;"
+                            Click="OnSettingsClick"
+                            ToolTip="{loc:Loc App_Settings}"
+                            AutomationProperties.Name="{loc:Loc App_Settings}" />
+                </StackPanel>
+            </Grid>
+
+            <Grid x:Name="CompactToolbar" Visibility="Collapsed" Margin="8,2,8,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <ToggleButton IsChecked="{Binding Settings.AlwaysOnTop, Mode=TwoWay}">
+                        <ToggleButton.Style>
+                            <Style TargetType="ToggleButton" BasedOn="{StaticResource CompactPinToggle}">
+                                <Setter Property="Content" Value="&#xE718;" />
+                                <Setter Property="ToolTip" Value="{loc:Loc App_Pin}" />
+                                <Setter Property="AutomationProperties.Name" Value="{loc:Loc App_Pin}" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter Property="Content" Value="&#xE840;" />
+                                        <Setter Property="ToolTip" Value="{loc:Loc App_Unpin}" />
+                                        <Setter Property="AutomationProperties.Name" Value="{loc:Loc App_Unpin}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+                    <Button Style="{StaticResource CompactIconButton}"
+                            Content="&#xE740;"
+                            Click="OnExpandClick"
+                            ToolTip="{loc:Loc App_ExpandMode}"
+                            AutomationProperties.Name="{loc:Loc App_ExpandMode}" />
+                </StackPanel>
+            </Grid>
         </Grid>
 
         <ContentControl x:Name="CalculatorHost"

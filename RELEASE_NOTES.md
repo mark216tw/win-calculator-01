@@ -1,4 +1,4 @@
-# mini計算機 1.5.1
+# mini計算機 1.6.1
 
 Windows 11 上的輕量計算機，提供標準與科學兩種模式。本版本提供 x64 與 ARM64 的非 Self-Contained（framework-dependent）壓縮檔，不含安裝程式。
 
@@ -6,13 +6,16 @@ Windows 11 上的輕量計算機，提供標準與科學兩種模式。本版本
 
 | 檔案 | 適用裝置 |
 | --- | --- |
-| `MiniCalculator-1.5.1-win-x64.zip` | Intel／AMD x64 電腦 |
-| `MiniCalculator-1.5.1-win-arm64.zip` | Windows on ARM（ARM64）裝置 |
+| `MiniCalculator-1.6.1-win-x64.zip` | Intel／AMD x64 電腦 |
+| `MiniCalculator-1.6.1-win-arm64.zip` | Windows on ARM（ARM64）裝置 |
 
 解壓縮後直接執行 `MiniCalculator.exe`。由於採用非 Self-Contained 發佈，請先安裝 [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0)。
 
 ## 本次更新
 
+- 新增極小視窗模式（僅限標準模式）：只保留顯示區與基本按鍵，`Ctrl+M` 快速切換，進入時自動置頂。
+- 極小模式預設 230×300、最小 190×250，隱藏文字標籤並精簡按鍵與間距。
+- 置頂按鈕改以 Pin／Pinned 圖示表示狀態，不再以主題色填滿。
 - 啟動更快：只建立目前使用的計算機模式，並延後非必要的主題色票與歷史資料讀取。
 - 支援隱含乘法：`2π`、`2(3+4)`、`3sin(30)`。
 - 連按 `=` 可重複上次運算；記住上次的模式與科學記號顯示。
@@ -31,6 +34,7 @@ Windows 11 上的輕量計算機，提供標準與科學兩種模式。本版本
 - **鍵盤操作**：數字與運算子可直接輸入，`Enter` 計算、`Esc` 清除、`Backspace` 刪除；`Ctrl+H` 歷史、`Ctrl+,` 設定、`Ctrl+1/2` 切換模式、`Ctrl+Shift+C` 複製結果。
 - **外觀**：跟隨系統或自選淺色／深色，並提供 12 款主題色。
 - **設定整合**：版本、授權與隱私等關於資訊集中於設定頁底部。
+- **極小模式**：只保留顯示區與基本按鍵，適合常駐在畫面角落。
 - **順手的小功能**：視窗置頂、記住視窗位置與大小、避免重複開啟。
 
 ## 快速開始

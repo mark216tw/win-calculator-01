@@ -26,4 +26,6 @@ public partial class AppSettings : ObservableObject
     private bool _scientificNotation;
 
     public WindowPlacement Window { get; set; } = new();
+
+    public WindowPlacement CompactWindow { get; set; } = new();
 }

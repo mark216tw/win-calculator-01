@@ -5,7 +5,7 @@ namespace Com.MiniCalculator.Helpers;
 
 public static class WindowPlacementHelper
 {
-    public static void Restore(Window window, WindowPlacement placement)
+    public static void Restore(Window window, WindowPlacement placement, bool allowMaximized = true)
     {
         if (!placement.HasValue)
         {
@@ -44,10 +44,30 @@ public static class WindowPlacementHelper
         window.Width = width;
         window.Height = height;
 
-        if (placement.Maximized)
+        if (allowMaximized && placement.Maximized)
         {
             window.WindowState = WindowState.Maximized;
         }
+    }
+
+    public static void ApplyCompactDefaults(Window window, double width, double height)
+    {
+        const double fallbackMargin = 16d;
+
+        Rect workArea = SystemParameters.WorkArea;
+        width = Math.Max(width, window.MinWidth);
+        height = Math.Max(height, window.MinHeight);
+        width = Math.Min(width, workArea.Width);
+        height = Math.Min(height, workArea.Height);
+
+        double left = IsFinite(window.Left) ? window.Left : workArea.Left + fallbackMargin;
+        double top = IsFinite(window.Top) ? window.Top : workArea.Top + fallbackMargin;
+
+        window.WindowStartupLocation = WindowStartupLocation.Manual;
+        window.Left = Math.Clamp(left, workArea.Left, Math.Max(workArea.Left, workArea.Right - width));
+        window.Top = Math.Clamp(top, workArea.Top, Math.Max(workArea.Top, workArea.Bottom - height));
+        window.Width = width;
+        window.Height = height;
     }
 
     public static void Save(Window window, WindowPlacement placement)
@@ -65,6 +85,8 @@ public static class WindowPlacementHelper
         placement.Maximized = window.WindowState == WindowState.Maximized;
         placement.HasValue = true;
     }
+
+    private static bool IsFinite(double value) => !double.IsNaN(value) && !double.IsInfinity(value);
 
     private static bool Intersects(Rect value, Rect bounds)
     {

@@ -17,4 +17,6 @@ internal sealed class SettingsData
     public bool ScientificNotation { get; set; }
 
     public WindowPlacement Window { get; set; } = new();
+
+    public WindowPlacement CompactWindow { get; set; } = new();
 }

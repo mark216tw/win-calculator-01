@@ -11,12 +11,26 @@ namespace Com.MiniCalculator.Views;
 
 public partial class MainWindow : Window
 {
+    private const double NormalMinWidth = 440d;
+    private const double NormalMinHeight = 620d;
+    private const double CompactMinWidth = 190d;
+    private const double CompactMinHeight = 250d;
+    private const double CompactDefaultWidth = 230d;
+    private const double CompactDefaultHeight = 300d;
+    private const double LegacyCompactDefaultWidth = 300d;
+    private const double LegacyCompactDefaultHeight = 420d;
+    private const double LegacyCompactMinWidth = 260d;
+    private const double LegacyCompactMinHeight = 380d;
+
     private readonly ShellViewModel _shell;
     private readonly ISettingsService _settings;
     private readonly Func<HistoryWindow> _historyFactory;
     private readonly Func<SettingsWindow> _settingsFactory;
     private StandardView? _standardView;
     private ScientificView? _scientificView;
+    private CompactView? _compactView;
+    private bool _isCompact;
+    private bool _alwaysOnTopBeforeCompact;
 
     public MainWindow(
         ShellViewModel shell,
@@ -32,9 +46,8 @@ public partial class MainWindow : Window
         DataContext = shell;
         InitializeComponent();
         RegisterShortcuts();
-        WindowPlacementHelper.Restore(this, settings.Current.Window);
+        ApplyNormalLayout(focusInput: false);
         _shell.PropertyChanged += OnShellPropertyChanged;
-        ApplyMode(_shell.IsStandardSelected, focusInput: false);
 
         Closing += OnClosing;
         Loaded += OnLoaded;
@@ -46,6 +59,7 @@ public partial class MainWindow : Window
         InputBindings.Add(new KeyBinding(new RelayCommand(OpenSettings), Key.OemComma, ModifierKeys.Control));
         InputBindings.Add(new KeyBinding(new RelayCommand(SelectStandardMode), Key.D1, ModifierKeys.Control));
         InputBindings.Add(new KeyBinding(new RelayCommand(SelectScientificMode), Key.D2, ModifierKeys.Control));
+        InputBindings.Add(new KeyBinding(new RelayCommand(ToggleCompactMode), Key.M, ModifierKeys.Control));
         InputBindings.Add(new KeyBinding(
             new RelayCommand(CopyFormattedResult),
             Key.C,
@@ -62,6 +76,11 @@ public partial class MainWindow : Window
 
     private void SelectMode(bool standard)
     {
+        if (_isCompact)
+        {
+            return;
+        }
+
         _shell.IsStandardSelected = standard;
         _shell.IsScientificSelected = !standard;
         FocusActiveInputDeferred();
@@ -96,6 +115,16 @@ public partial class MainWindow : Window
             return;
         }
 
+        if (_isCompact)
+        {
+            if (_shell.IsScientificSelected)
+            {
+                _shell.IsStandardSelected = true;
+            }
+
+            return;
+        }
+
         if (_shell.IsStandardSelected)
         {
             ApplyMode(standard: true, focusInput: false);
@@ -108,6 +137,11 @@ public partial class MainWindow : Window
 
     private void ApplyMode(bool standard, bool focusInput)
     {
+        if (_isCompact)
+        {
+            return;
+        }
+
         if (standard)
         {
             _standardView ??= new StandardView { DataContext = _shell.Calculator };
@@ -131,9 +165,67 @@ public partial class MainWindow : Window
         }
     }
 
+    private void ApplyNormalLayout(bool focusInput)
+    {
+        MinWidth = NormalMinWidth;
+        MinHeight = NormalMinHeight;
+        NormalToolbar.Visibility = Visibility.Visible;
+        CompactToolbar.Visibility = Visibility.Collapsed;
+
+        WindowPlacementHelper.Restore(this, _settings.Current.Window);
+        ApplyMode(_shell.IsStandardSelected, focusInput: false);
+
+        if (focusInput)
+        {
+            FocusActiveInputDeferred();
+        }
+    }
+
+    private void ApplyCompactLayout()
+    {
+        MinWidth = CompactMinWidth;
+        MinHeight = CompactMinHeight;
+        NormalToolbar.Visibility = Visibility.Collapsed;
+        CompactToolbar.Visibility = Visibility.Visible;
+
+        _compactView ??= new CompactView { DataContext = _shell.Calculator };
+        CalculatorHost.Content = _compactView;
+
+        if (_settings.Current.CompactWindow.HasValue)
+        {
+            WindowPlacementHelper.Restore(this, _settings.Current.CompactWindow, allowMaximized: false);
+            if (WindowState == WindowState.Maximized)
+            {
+                WindowState = WindowState.Normal;
+            }
+
+            if (UsesLegacyCompactSize())
+            {
+                WindowPlacementHelper.ApplyCompactDefaults(this, CompactDefaultWidth, CompactDefaultHeight);
+            }
+        }
+        else
+        {
+            WindowPlacementHelper.ApplyCompactDefaults(this, CompactDefaultWidth, CompactDefaultHeight);
+        }
+
+        FocusActiveInputDeferred();
+    }
+
+    private bool UsesLegacyCompactSize() =>
+        MatchesSize(LegacyCompactDefaultWidth, LegacyCompactDefaultHeight)
+        || MatchesSize(LegacyCompactMinWidth, LegacyCompactMinHeight);
+
+    private bool MatchesSize(double width, double height) =>
+        Math.Abs(Width - width) < 2d && Math.Abs(Height - height) < 2d;
+
     private void FocusActiveInput()
     {
-        if (_shell.IsStandardSelected)
+        if (_isCompact)
+        {
+            _compactView?.FocusInput();
+        }
+        else if (_shell.IsStandardSelected)
         {
             _standardView?.FocusInput();
         }
@@ -160,14 +252,82 @@ public partial class MainWindow : Window
         Activate();
     }
 
-    private void OnClosing(object? sender, CancelEventArgs e)
+    private void ToggleCompactMode()
     {
-        SavePlacement();
+        if (_isCompact)
+        {
+            ExitCompactMode();
+            return;
+        }
+
+        if (!_shell.IsStandardSelected)
+        {
+            return;
+        }
+
+        EnterCompactMode();
     }
 
-    private void SavePlacement()
+    private void OnCompactClick(object sender, RoutedEventArgs e)
     {
+        if (_shell.IsStandardSelected)
+        {
+            EnterCompactMode();
+        }
+    }
+
+    private void OnExpandClick(object sender, RoutedEventArgs e) => ExitCompactMode();
+
+    private void EnterCompactMode()
+    {
+        if (_isCompact || !_shell.IsStandardSelected)
+        {
+            return;
+        }
+
         WindowPlacementHelper.Save(this, _settings.Current.Window);
+        if (WindowState == WindowState.Maximized)
+        {
+            WindowState = WindowState.Normal;
+        }
+
+        _alwaysOnTopBeforeCompact = _settings.Current.AlwaysOnTop;
+        _settings.Current.AlwaysOnTop = true;
+        _isCompact = true;
+        _settings.Save();
+
+        ApplyCompactLayout();
+    }
+
+    private void ExitCompactMode()
+    {
+        if (!_isCompact)
+        {
+            return;
+        }
+
+        WindowPlacementHelper.Save(this, _settings.Current.CompactWindow);
+        _settings.Current.AlwaysOnTop = _alwaysOnTopBeforeCompact;
+        _shell.IsStandardSelected = true;
+        _settings.Current.IsScientificMode = false;
+        _isCompact = false;
+
+        ApplyNormalLayout(focusInput: true);
+        _settings.Save();
+    }
+
+    private void OnClosing(object? sender, CancelEventArgs e)
+    {
+        if (_isCompact)
+        {
+            WindowPlacementHelper.Save(this, _settings.Current.CompactWindow);
+            _settings.Current.AlwaysOnTop = _alwaysOnTopBeforeCompact;
+        }
+        else
+        {
+            WindowPlacementHelper.Save(this, _settings.Current.Window);
+        }
+
         _settings.Save();
     }
 

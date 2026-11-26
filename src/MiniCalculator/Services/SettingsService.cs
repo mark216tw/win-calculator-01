@@ -45,6 +45,7 @@ public sealed class SettingsService : ISettingsService, IDisposable
             IsScientificMode = data.IsScientificMode,
             ScientificNotation = data.ScientificNotation,
             Window = Copy(data.Window),
+            CompactWindow = Copy(data.CompactWindow),
         };
     }
 
@@ -58,17 +59,26 @@ public sealed class SettingsService : ISettingsService, IDisposable
         IsScientificMode = settings.IsScientificMode,
         ScientificNotation = settings.ScientificNotation,
         Window = Copy(settings.Window),
+        CompactWindow = Copy(settings.CompactWindow),
     };
 
-    private static WindowPlacement Copy(WindowPlacement source) => new()
+    private static WindowPlacement Copy(WindowPlacement? source)
     {
-        HasValue = source.HasValue,
-        Left = source.Left,
-        Top = source.Top,
-        Width = source.Width,
-        Height = source.Height,
-        Maximized = source.Maximized,
-    };
+        if (source is null)
+        {
+            return new WindowPlacement();
+        }
+
+        return new WindowPlacement
+        {
+            HasValue = source.HasValue,
+            Left = source.Left,
+            Top = source.Top,
+            Width = source.Width,
+            Height = source.Height,
+            Maximized = source.Maximized,
+        };
+    }
 
     public void Dispose()
     {

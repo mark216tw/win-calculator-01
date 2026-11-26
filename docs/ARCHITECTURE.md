@@ -1,6 +1,6 @@
 # 系統架構與技術文件
 
-本文件說明 mini計算機的技術架構、模組職責、執行流程與重要設計決策。對應版本 1.5.1。
+本文件說明 mini計算機的技術架構、模組職責、執行流程與重要設計決策。對應版本 1.6.0。
 
 ## 1. 技術基線
 
@@ -28,7 +28,7 @@ MiniCalculator.sln
 │  ├─ Models/                         DTO、列舉與求值結果
 │  ├─ Services/                       求值、儲存、主題、單一實例、日誌
 │  ├─ ViewModels/                     MVVM 狀態與命令
-│  ├─ Views/                          主視窗、標準／科學面板、歷史／設定視窗
+│  ├─ Views/                          主視窗、標準／科學／極小面板、歷史／設定視窗
 │  ├─ Helpers/                        格式化、在地化、轉換器、視窗位置
 │  ├─ Strings/Resources.resx          zh-Hant 使用者文字
 │  ├─ Styles/                         共用樣式與 24 份主題字典
@@ -55,7 +55,8 @@ flowchart TD
 ### Views
 
 - 只負責畫面呈現、事件轉接與視窗生命週期。
-- 主視窗以 `ContentControl` 承載目前模式的 `StandardView` 或 `ScientificView`，需要時才建立並快取。
+- 主視窗以 `ContentControl` 承載目前模式的 `StandardView`、`ScientificView` 或 `CompactView`，需要時才建立並快取。
+- 極小模式由 `MainWindow` 切換尺寸、工具列與 `CompactView`，並處理置頂與視窗位置保存。
 - 歷史與設定視窗由 `Func<HistoryWindow>`、`Func<SettingsWindow>` 工廠建立，避免 View 直接 new 服務。
 
 ### ViewModels
@@ -81,7 +82,7 @@ flowchart TD
 
 ### Models
 
-- `AppSettings`：可觀察的應用程式設定（顯示模式、主題、置頂、角度單位、記憶體、模式、科學記號、視窗位置）。
+- `AppSettings`：可觀察的應用程式設定（顯示模式、主題、置頂、角度單位、記憶體、模式、科學記號、視窗位置、極小視窗位置）。
 - `SettingsData`：存檔用純 DTO，避免序列化相依於 MVVM 產生的屬性。
 - `EvaluationResult`：求值結果（成功、值、錯誤分類）。
 - `HistoryEntry`：歷史紀錄項目。

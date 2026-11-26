@@ -33,6 +33,12 @@
   <data name="App_Unpin" xml:space="preserve">
     <value>取消置頂</value>
   </data>
+  <data name="App_CompactMode" xml:space="preserve">
+    <value>極小模式</value>
+  </data>
+  <data name="App_ExpandMode" xml:space="preserve">
+    <value>返回標準模式</value>
+  </data>
   <data name="Calc_Error_Syntax" xml:space="preserve">
     <value>語法錯誤</value>
   </data>
