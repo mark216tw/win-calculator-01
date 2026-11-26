@@ -1,0 +1,180 @@
+<UserControl x:Class="Com.MiniCalculator.Views.ScientificView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:Com.MiniCalculator.Helpers"
+             Loaded="OnViewLoaded">
+    <Grid Margin="12,6,12,12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                Background="{DynamicResource DisplayBackgroundBrush}"
+                BorderBrush="{DynamicResource BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="12,8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <DockPanel Grid.Row="0" LastChildFill="False">
+                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                        <Button Style="{StaticResource IconButton}"
+                                Width="28"
+                                Height="28"
+                                Content="&#xE8C8;"
+                                Command="{Binding CopyRawResultCommand}"
+                                ToolTip="{loc:Loc Calc_CopyRaw}"
+                                AutomationProperties.Name="{loc:Loc Calc_CopyRaw}" />
+                        <Button Style="{StaticResource IconButton}"
+                                Width="28"
+                                Height="28"
+                                Content="&#xE8C8;"
+                                Command="{Binding CopyResultCommand}"
+                                ToolTip="{loc:Loc Calc_CopyResult}"
+                                AutomationProperties.Name="{loc:Loc Calc_CopyResult}" />
+                    </StackPanel>
+                    <TextBlock DockPanel.Dock="Left"
+                               Text="M"
+                               FontWeight="Bold"
+                               Foreground="{DynamicResource AccentBrush}"
+                               VerticalAlignment="Center"
+                               Visibility="{Binding HasMemory, Converter={StaticResource BoolToVis}}" />
+                    <TextBlock DockPanel.Dock="Left"
+                               Text="{Binding StatusMessage}"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               FontSize="12"
+                               Margin="8,0,0,0"
+                               VerticalAlignment="Center">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding StatusMessage}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding StatusMessage}" Value="">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </DockPanel>
+
+                <TextBox x:Name="ExpressionBox"
+                         Grid.Row="1"
+                         Style="{StaticResource ExpressionBox}"
+                         Text="{Binding Expression, UpdateSourceTrigger=PropertyChanged}"
+                         MaxLines="1"
+                         TextWrapping="NoWrap"
+                         HorizontalScrollBarVisibility="Auto"
+                         SelectionChanged="OnExpressionSelectionChanged" />
+
+                <TextBlock Grid.Row="1"
+                           Text="{loc:Loc Calc_ExpressionHint}"
+                           IsHitTestVisible="False"
+                           Foreground="{DynamicResource TextSecondaryBrush}"
+                           FontSize="20"
+                           Padding="4,2"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Expression}" Value="">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <TextBlock Grid.Row="2"
+                           Text="{Binding ResultDisplay}"
+                           ToolTip="{Binding ResultDisplay}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource ResultText}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsError}" Value="True">
+                                    <Setter Property="Foreground" Value="{DynamicResource ErrorBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
+        </Border>
+
+        <UniformGrid Grid.Row="1" Columns="6" Margin="0,6,0,0">
+            <ToggleButton Style="{StaticResource KeyToggleButton}" Content="2nd" IsChecked="{Binding IsSecondFunction, Mode=TwoWay}" AutomationProperties.Name="{loc:Loc Calc_A11y_Second}" />
+            <ToggleButton Style="{StaticResource KeyToggleButton}" Content="hyp" IsChecked="{Binding IsHyperbolic, Mode=TwoWay}" AutomationProperties.Name="{loc:Loc Calc_A11y_Hyperbolic}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="{Binding AngleUnitLabel}" Command="{Binding CycleAngleCommand}" AutomationProperties.Name="{loc:Loc Calc_A11y_AngleUnit}" />
+            <ToggleButton Style="{StaticResource KeyToggleButton}" Content="F-E" IsChecked="{Binding IsScientificNotation, Mode=TwoWay}" AutomationProperties.Name="{loc:Loc Calc_A11y_ScientificNotation}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="(" Command="{Binding InsertCommand}" CommandParameter="(" AutomationProperties.Name="{loc:Loc Calc_A11y_LeftParen}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content=")" Command="{Binding InsertCommand}" CommandParameter=")" AutomationProperties.Name="{loc:Loc Calc_A11y_RightParen}" />
+
+            <Button Style="{StaticResource FunctionKeyButton}" Content="{Binding SinLabel}" Command="{Binding InsertTrigCommand}" CommandParameter="sin" AutomationProperties.Name="{loc:Loc Calc_A11y_Sin}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="{Binding CosLabel}" Command="{Binding InsertTrigCommand}" CommandParameter="cos" AutomationProperties.Name="{loc:Loc Calc_A11y_Cos}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="{Binding TanLabel}" Command="{Binding InsertTrigCommand}" CommandParameter="tan" AutomationProperties.Name="{loc:Loc Calc_A11y_Tan}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="ln" Command="{Binding InsertCommand}" CommandParameter="ln(" AutomationProperties.Name="{loc:Loc Calc_A11y_Ln}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="log" Command="{Binding InsertCommand}" CommandParameter="log(" AutomationProperties.Name="{loc:Loc Calc_A11y_Log}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="eˣ" Command="{Binding InsertCommand}" CommandParameter="exp(" AutomationProperties.Name="{loc:Loc Calc_A11y_Exp}" />
+
+            <Button Style="{StaticResource FunctionKeyButton}" Content="xʸ" Command="{Binding InsertCommand}" CommandParameter="^" AutomationProperties.Name="{loc:Loc Calc_A11y_Power}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="x²" Command="{Binding SquareCommand}" AutomationProperties.Name="{loc:Loc Calc_A11y_Square}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="x³" Command="{Binding CubeCommand}" AutomationProperties.Name="{loc:Loc Calc_A11y_Cube}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="√" Command="{Binding SqrtCommand}" AutomationProperties.Name="{loc:Loc Calc_A11y_Sqrt}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="∛" Command="{Binding InsertCommand}" CommandParameter="cbrt(" AutomationProperties.Name="{loc:Loc Calc_A11y_Cbrt}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="10ˣ" Command="{Binding InsertCommand}" CommandParameter="10^(" AutomationProperties.Name="{loc:Loc Calc_A11y_TenPower}" />
+
+            <Button Style="{StaticResource FunctionKeyButton}" Content="1/x" Command="{Binding ReciprocalCommand}" AutomationProperties.Name="{loc:Loc Calc_A11y_Reciprocal}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="|x|" Command="{Binding InsertCommand}" CommandParameter="abs(" AutomationProperties.Name="{loc:Loc Calc_A11y_Abs}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="n!" Command="{Binding InsertCommand}" CommandParameter="!" AutomationProperties.Name="{loc:Loc Calc_A11y_Factorial}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="mod" Command="{Binding InsertCommand}" CommandParameter=" mod " AutomationProperties.Name="{loc:Loc Calc_A11y_Mod}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="rand" Command="{Binding InsertCommand}" CommandParameter="rand()" AutomationProperties.Name="{loc:Loc Calc_A11y_Rand}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="π" Command="{Binding InsertCommand}" CommandParameter="π" AutomationProperties.Name="{loc:Loc Calc_A11y_Pi}" />
+
+            <Button Style="{StaticResource FunctionKeyButton}" Content="floor" Command="{Binding InsertCommand}" CommandParameter="floor(" AutomationProperties.Name="{loc:Loc Calc_A11y_Floor}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="ceil" Command="{Binding InsertCommand}" CommandParameter="ceil(" AutomationProperties.Name="{loc:Loc Calc_A11y_Ceil}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="round" Command="{Binding InsertCommand}" CommandParameter="round(" AutomationProperties.Name="{loc:Loc Calc_A11y_Round}" />
+            <Button Style="{StaticResource MemoryKeyButton}" Content="MS" Command="{Binding MemoryOperationCommand}" CommandParameter="MS" AutomationProperties.Name="{loc:Loc Calc_A11y_MemoryStore}" />
+            <Button Style="{StaticResource MemoryKeyButton}" Content="MR" Command="{Binding MemoryOperationCommand}" CommandParameter="MR" AutomationProperties.Name="{loc:Loc Calc_A11y_MemoryRecall}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="e" Command="{Binding InsertCommand}" CommandParameter="e" AutomationProperties.Name="{loc:Loc Calc_A11y_E}" />
+
+            <Button Style="{StaticResource KeyButton}" Content="7" Command="{Binding InsertCommand}" CommandParameter="7" />
+            <Button Style="{StaticResource KeyButton}" Content="8" Command="{Binding InsertCommand}" CommandParameter="8" />
+            <Button Style="{StaticResource KeyButton}" Content="9" Command="{Binding InsertCommand}" CommandParameter="9" />
+            <Button Style="{StaticResource KeyButton}" Content="÷" Command="{Binding InsertCommand}" CommandParameter="÷" AutomationProperties.Name="{loc:Loc Calc_A11y_Divide}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="⌫" Command="{Binding BackspaceCommand}" AutomationProperties.Name="{loc:Loc Calc_A11y_Backspace}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="CE" Command="{Binding ClearEntryCommand}" AutomationProperties.Name="{loc:Loc Calc_A11y_ClearEntry}" />
+
+            <Button Style="{StaticResource KeyButton}" Content="4" Command="{Binding InsertCommand}" CommandParameter="4" />
+            <Button Style="{StaticResource KeyButton}" Content="5" Command="{Binding InsertCommand}" CommandParameter="5" />
+            <Button Style="{StaticResource KeyButton}" Content="6" Command="{Binding InsertCommand}" CommandParameter="6" />
+            <Button Style="{StaticResource KeyButton}" Content="×" Command="{Binding InsertCommand}" CommandParameter="×" AutomationProperties.Name="{loc:Loc Calc_A11y_Multiply}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="C" Command="{Binding ClearAllCommand}" AutomationProperties.Name="{loc:Loc Calc_A11y_ClearAll}" />
+            <Button Style="{StaticResource MemoryKeyButton}" Content="MC" Command="{Binding MemoryOperationCommand}" CommandParameter="MC" AutomationProperties.Name="{loc:Loc Calc_A11y_MemoryClear}" />
+
+            <Button Style="{StaticResource KeyButton}" Content="1" Command="{Binding InsertCommand}" CommandParameter="1" />
+            <Button Style="{StaticResource KeyButton}" Content="2" Command="{Binding InsertCommand}" CommandParameter="2" />
+            <Button Style="{StaticResource KeyButton}" Content="3" Command="{Binding InsertCommand}" CommandParameter="3" />
+            <Button Style="{StaticResource KeyButton}" Content="−" Command="{Binding InsertCommand}" CommandParameter="−" AutomationProperties.Name="{loc:Loc Calc_A11y_Subtract}" />
+            <Button Style="{StaticResource MemoryKeyButton}" Content="M+" Command="{Binding MemoryOperationCommand}" CommandParameter="M+" AutomationProperties.Name="{loc:Loc Calc_A11y_MemoryAdd}" />
+            <Button Style="{StaticResource MemoryKeyButton}" Content="M−" Command="{Binding MemoryOperationCommand}" CommandParameter="M-" AutomationProperties.Name="{loc:Loc Calc_A11y_MemorySubtract}" />
+
+            <Button Style="{StaticResource KeyButton}" Content="±" Command="{Binding ToggleSignCommand}" AutomationProperties.Name="{loc:Loc Calc_A11y_Sign}" />
+            <Button Style="{StaticResource KeyButton}" Content="0" Command="{Binding InsertCommand}" CommandParameter="0" />
+            <Button Style="{StaticResource KeyButton}" Content="." Command="{Binding InsertCommand}" CommandParameter="." AutomationProperties.Name="{loc:Loc Calc_A11y_Decimal}" />
+            <Button Style="{StaticResource KeyButton}" Content="+" Command="{Binding InsertCommand}" CommandParameter="+" AutomationProperties.Name="{loc:Loc Calc_A11y_Add}" />
+            <Button Style="{StaticResource AccentKeyButton}" Content="=" Command="{Binding EvaluateCommand}" AutomationProperties.Name="{loc:Loc Calc_A11y_Equals}" />
+            <Button Style="{StaticResource FunctionKeyButton}" Content="DMS" Command="{Binding InsertCommand}" CommandParameter="dms(" AutomationProperties.Name="{loc:Loc Calc_A11y_Dms}" />
+        </UniformGrid>
+    </Grid>
+</UserControl>

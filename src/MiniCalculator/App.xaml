@@ -1,0 +1,14 @@
+<Application x:Class="Com.MiniCalculator.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:helpers="clr-namespace:Com.MiniCalculator.Helpers">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/Controls.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BoolToVis" />
+            <helpers:EnumToBooleanConverter x:Key="EnumToBool" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

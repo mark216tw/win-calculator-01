@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="App_Title" xml:space="preserve">
+    <value>mini計算機</value>
+  </data>
+  <data name="App_StandardMode" xml:space="preserve">
+    <value>標準</value>
+  </data>
+  <data name="App_ScientificMode" xml:space="preserve">
+    <value>科學</value>
+  </data>
+  <data name="App_History" xml:space="preserve">
+    <value>歷史紀錄</value>
+  </data>
+  <data name="App_Settings" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="App_Pin" xml:space="preserve">
+    <value>視窗置頂</value>
+  </data>
+  <data name="App_Unpin" xml:space="preserve">
+    <value>取消置頂</value>
+  </data>
+  <data name="Calc_Error_Syntax" xml:space="preserve">
+    <value>語法錯誤</value>
+  </data>
+  <data name="Calc_Error_DivideByZero" xml:space="preserve">
+    <value>無法除以零</value>
+  </data>
+  <data name="Calc_Error_Domain" xml:space="preserve">
+    <value>無效輸入</value>
+  </data>
+  <data name="Calc_Error_Overflow" xml:space="preserve">
+    <value>數值超出範圍</value>
+  </data>
+  <data name="Calc_CopyResult" xml:space="preserve">
+    <value>複製結果</value>
+  </data>
+  <data name="Calc_HistoryEmpty" xml:space="preserve">
+    <value>尚無歷史紀錄</value>
+  </data>
+  <data name="Calc_MemoryEmpty" xml:space="preserve">
+    <value>記憶體為空</value>
+  </data>
+  <data name="Calc_ExpressionHint" xml:space="preserve">
+    <value>在此輸入運算式</value>
+  </data>
+  <data name="History_Title" xml:space="preserve">
+    <value>歷史紀錄</value>
+  </data>
+  <data name="History_Clear" xml:space="preserve">
+    <value>清除全部</value>
+  </data>
+  <data name="Confirm_ClearHistory" xml:space="preserve">
+    <value>確定要清除所有歷史紀錄嗎？</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="Settings_DisplayMode" xml:space="preserve">
+    <value>顯示模式</value>
+  </data>
+  <data name="Settings_Display_System" xml:space="preserve">
+    <value>跟隨系統</value>
+  </data>
+  <data name="Settings_Display_Light" xml:space="preserve">
+    <value>淺色</value>
+  </data>
+  <data name="Settings_Display_Dark" xml:space="preserve">
+    <value>深色</value>
+  </data>
+  <data name="Settings_Theme" xml:space="preserve">
+    <value>主題色</value>
+  </data>
+  <data name="Settings_Theme_ClassicBlue" xml:space="preserve">
+    <value>經典藍</value>
+  </data>
+  <data name="Settings_Theme_EyeCareYellow" xml:space="preserve">
+    <value>護眼黃</value>
+  </data>
+  <data name="Settings_Theme_ForestGreen" xml:space="preserve">
+    <value>森林綠</value>
+  </data>
+  <data name="Settings_Theme_TwilightPurple" xml:space="preserve">
+    <value>暮色紫</value>
+  </data>
+  <data name="Settings_Theme_NeutralGray" xml:space="preserve">
+    <value>中性灰</value>
+  </data>
+  <data name="Settings_Theme_RosePink" xml:space="preserve">
+    <value>玫瑰粉</value>
+  </data>
+  <data name="Settings_Theme_Teal" xml:space="preserve">
+    <value>青碧</value>
+  </data>
+  <data name="Settings_Theme_SunsetOrange" xml:space="preserve">
+    <value>夕陽橘</value>
+  </data>
+  <data name="Settings_Theme_Indigo" xml:space="preserve">
+    <value>靛青</value>
+  </data>
+  <data name="Settings_Theme_CoralRed" xml:space="preserve">
+    <value>珊瑚紅</value>
+  </data>
+  <data name="Settings_Theme_Lavender" xml:space="preserve">
+    <value>薰衣草</value>
+  </data>
+  <data name="Settings_Theme_WarmBrown" xml:space="preserve">
+    <value>暖棕</value>
+  </data>
+  <data name="Settings_AlwaysOnTop" xml:space="preserve">
+    <value>視窗置頂</value>
+  </data>
+  <data name="Settings_Close" xml:space="preserve">
+    <value>關閉</value>
+  </data>
+  <data name="About_Title" xml:space="preserve">
+    <value>關於 mini計算機</value>
+  </data>
+  <data name="About_Version" xml:space="preserve">
+    <value>版本</value>
+  </data>
+  <data name="About_FileVersion" xml:space="preserve">
+    <value>檔案版本</value>
+  </data>
+  <data name="About_License" xml:space="preserve">
+    <value>授權</value>
+  </data>
+  <data name="About_LicenseValue" xml:space="preserve">
+    <value>MIT License</value>
+  </data>
+  <data name="About_Privacy" xml:space="preserve">
+    <value>隱私</value>
+  </data>
+  <data name="About_PrivacyValue" xml:space="preserve">
+    <value>本程式僅在本機執行，不收集或傳送任何資料。</value>
+  </data>
+  <data name="About_Close" xml:space="preserve">
+    <value>關閉</value>
+  </data>
+  <data name="Calc_CopyRaw" xml:space="preserve">
+    <value>複製原始值</value>
+  </data>
+  <data name="Calc_Copied" xml:space="preserve">
+    <value>已複製</value>
+  </data>
+  <data name="Settings_Reset" xml:space="preserve">
+    <value>恢復預設值</value>
+  </data>
+  <data name="Confirm_ResetSettings" xml:space="preserve">
+    <value>確定要將設定恢復為預設值嗎？</value>
+  </data>
+  <data name="Calc_A11y_MemoryClear" xml:space="preserve">
+    <value>記憶體清除</value>
+  </data>
+  <data name="Calc_A11y_MemoryRecall" xml:space="preserve">
+    <value>記憶體召回</value>
+  </data>
+  <data name="Calc_A11y_MemoryAdd" xml:space="preserve">
+    <value>記憶體加</value>
+  </data>
+  <data name="Calc_A11y_MemorySubtract" xml:space="preserve">
+    <value>記憶體減</value>
+  </data>
+  <data name="Calc_A11y_MemoryStore" xml:space="preserve">
+    <value>記憶體儲存</value>
+  </data>
+  <data name="Calc_A11y_Percent" xml:space="preserve">
+    <value>百分比</value>
+  </data>
+  <data name="Calc_A11y_ClearEntry" xml:space="preserve">
+    <value>清除輸入</value>
+  </data>
+  <data name="Calc_A11y_ClearAll" xml:space="preserve">
+    <value>全部清除</value>
+  </data>
+  <data name="Calc_A11y_Backspace" xml:space="preserve">
+    <value>刪除</value>
+  </data>
+  <data name="Calc_A11y_Reciprocal" xml:space="preserve">
+    <value>倒數</value>
+  </data>
+  <data name="Calc_A11y_Square" xml:space="preserve">
+    <value>平方</value>
+  </data>
+  <data name="Calc_A11y_Cube" xml:space="preserve">
+    <value>立方</value>
+  </data>
+  <data name="Calc_A11y_Sqrt" xml:space="preserve">
+    <value>平方根</value>
+  </data>
+  <data name="Calc_A11y_Cbrt" xml:space="preserve">
+    <value>立方根</value>
+  </data>
+  <data name="Calc_A11y_Power" xml:space="preserve">
+    <value>次方</value>
+  </data>
+  <data name="Calc_A11y_TenPower" xml:space="preserve">
+    <value>十的次方</value>
+  </data>
+  <data name="Calc_A11y_Abs" xml:space="preserve">
+    <value>絕對值</value>
+  </data>
+  <data name="Calc_A11y_Factorial" xml:space="preserve">
+    <value>階乘</value>
+  </data>
+  <data name="Calc_A11y_Mod" xml:space="preserve">
+    <value>取餘數</value>
+  </data>
+  <data name="Calc_A11y_Rand" xml:space="preserve">
+    <value>隨機數</value>
+  </data>
+  <data name="Calc_A11y_Pi" xml:space="preserve">
+    <value>圓周率</value>
+  </data>
+  <data name="Calc_A11y_Floor" xml:space="preserve">
+    <value>向下取整</value>
+  </data>
+  <data name="Calc_A11y_Ceil" xml:space="preserve">
+    <value>向上取整</value>
+  </data>
+  <data name="Calc_A11y_Round" xml:space="preserve">
+    <value>四捨五入</value>
+  </data>
+  <data name="Calc_A11y_E" xml:space="preserve">
+    <value>自然常數</value>
+  </data>
+  <data name="Calc_A11y_Dms" xml:space="preserve">
+    <value>度分秒</value>
+  </data>
+  <data name="Calc_A11y_Second" xml:space="preserve">
+    <value>第二功能</value>
+  </data>
+  <data name="Calc_A11y_Hyperbolic" xml:space="preserve">
+    <value>雙曲函數</value>
+  </data>
+  <data name="Calc_A11y_ScientificNotation" xml:space="preserve">
+    <value>科學記號</value>
+  </data>
+  <data name="Calc_A11y_AngleUnit" xml:space="preserve">
+    <value>角度單位</value>
+  </data>
+  <data name="Calc_A11y_LeftParen" xml:space="preserve">
+    <value>左括號</value>
+  </data>
+  <data name="Calc_A11y_RightParen" xml:space="preserve">
+    <value>右括號</value>
+  </data>
+  <data name="Calc_A11y_Sin" xml:space="preserve">
+    <value>正弦函數</value>
+  </data>
+  <data name="Calc_A11y_Cos" xml:space="preserve">
+    <value>餘弦函數</value>
+  </data>
+  <data name="Calc_A11y_Tan" xml:space="preserve">
+    <value>正切函數</value>
+  </data>
+  <data name="Calc_A11y_Ln" xml:space="preserve">
+    <value>自然對數</value>
+  </data>
+  <data name="Calc_A11y_Log" xml:space="preserve">
+    <value>常用對數</value>
+  </data>
+  <data name="Calc_A11y_Exp" xml:space="preserve">
+    <value>指數函數</value>
+  </data>
+  <data name="Calc_A11y_Divide" xml:space="preserve">
+    <value>除</value>
+  </data>
+  <data name="Calc_A11y_Multiply" xml:space="preserve">
+    <value>乘</value>
+  </data>
+  <data name="Calc_A11y_Subtract" xml:space="preserve">
+    <value>減</value>
+  </data>
+  <data name="Calc_A11y_Add" xml:space="preserve">
+    <value>加</value>
+  </data>
+  <data name="Calc_A11y_Equals" xml:space="preserve">
+    <value>等於</value>
+  </data>
+  <data name="Calc_A11y_Sign" xml:space="preserve">
+    <value>正負號</value>
+  </data>
+  <data name="Calc_A11y_Decimal" xml:space="preserve">
+    <value>小數點</value>
+  </data>
+  <data name="Error_Unhandled" xml:space="preserve">
+    <value>發生未預期的錯誤，請稍後再試。</value>
+  </data>
+</root>
