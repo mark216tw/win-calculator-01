@@ -45,7 +45,7 @@ Windows 11 上的輕量計算機，提供標準與科學兩種模式。本版本
 - 歷史：`%AppData%\MiniCalculator\history.json`
 - 日誌：`%AppData%\MiniCalculator\logs\`（僅警告與錯誤）
 
-程式僅在本機執行，不會收集或傳送任何資料。詳見[隱私說明](docs/PRIVACY.md)。
+程式僅在本機執行，不會收集或傳送任何資料。詳見[隱私說明](https://github.com/mark216tw/win-calculator-01/blob/main/docs/PRIVACY.md)。
 
 ## 系統需求
 
@@ -55,4 +55,4 @@ Windows 11 上的輕量計算機，提供標準與科學兩種模式。本版本
 
 ## 授權
 
-MIT License，Copyright © 2026 mark216tw。詳見 [LICENSE](LICENSE)。
+MIT License，Copyright © 2026 mark216tw。詳見 [LICENSE](https://github.com/mark216tw/win-calculator-01/blob/main/LICENSE)。
