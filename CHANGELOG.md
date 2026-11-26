@@ -2,6 +2,15 @@
 
 所有重要變更均記錄於此。格式參考 [Keep a Changelog](https://keepachangelog.com/)，版本採語意化版本。
 
+## [1.6.2] - 2026-11-26
+
+### 效能
+- 啟用多核心 JIT（`ProfileOptimization`），加速後續啟動的 JIT 編譯。
+- 單一實例檢查移至 Host 初始化前，重複啟動時能更快喚醒既有視窗。
+- 延後非關鍵啟動作業（Host 啟動、單一實例監聽、系統主題變更事件、快捷鍵註冊與儲存計時器建立）至主視窗顯示之後。
+- 凍結所有主題與色票 `SolidColorBrush`（`po:Freeze="True"`），並將設定、歷史與科學模式專用樣式移出啟動共用資源字典。
+- 設定 `NeutralLanguage=zh-Hant` 略過附屬語系組件探測，並為 Release 發佈啟用 `PublishReadyToRun`。
+
 ## [1.6.1] - 2026-11-26
 
 ### 變更

@@ -13,6 +13,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MiniCalculator;component/Styles/ThemeSwatches.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MiniCalculator;component/Styles/SettingsControls.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>

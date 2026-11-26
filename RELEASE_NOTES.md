@@ -1,4 +1,4 @@
-# mini計算機 1.6.1
+# mini計算機 1.6.2
 
 Windows 11 上的輕量計算機，提供標準與科學兩種模式。本版本提供 x64 與 ARM64 的非 Self-Contained（framework-dependent）壓縮檔，不含安裝程式。
 
@@ -6,13 +6,14 @@ Windows 11 上的輕量計算機，提供標準與科學兩種模式。本版本
 
 | 檔案 | 適用裝置 |
 | --- | --- |
-| `MiniCalculator-1.6.1-win-x64.zip` | Intel／AMD x64 電腦 |
-| `MiniCalculator-1.6.1-win-arm64.zip` | Windows on ARM（ARM64）裝置 |
+| `MiniCalculator-1.6.2-win-x64.zip` | Intel／AMD x64 電腦 |
+| `MiniCalculator-1.6.2-win-arm64.zip` | Windows on ARM（ARM64）裝置 |
 
 解壓縮後直接執行 `MiniCalculator.exe`。由於採用非 Self-Contained 發佈，請先安裝 [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0)。
 
 ## 本次更新
 
+- 啟動速度優化：啟用多核心 JIT（`ProfileOptimization`）、凍結主題筆刷、拆分非啟動期 XAML 樣式、延後系統主題監聽與 Host 啟動，並為 Release 啟用 ReadyToRun 預編譯；重複開啟時更快喚醒既有視窗。
 - 新增極小視窗模式（僅限標準模式）：只保留顯示區與基本按鍵，`Ctrl+M` 快速切換，進入時自動置頂。
 - 極小模式預設 230×300、最小 190×250，隱藏文字標籤並精簡按鍵與間距。
 - 置頂按鈕改以 Pin／Pinned 圖示表示狀態，不再以主題色填滿。

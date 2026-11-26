@@ -1,21 +1,22 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FBF5EE" />
-    <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF" />
-    <SolidColorBrush x:Key="SurfaceAltBrush" Color="#F3E8DA" />
-    <SolidColorBrush x:Key="DisplayBackgroundBrush" Color="#FFFFFF" />
-    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#33261A" />
-    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#6F5D4B" />
-    <SolidColorBrush x:Key="BorderBrush" Color="#E4D2BC" />
-    <SolidColorBrush x:Key="KeyBackgroundBrush" Color="#FFFFFF" />
-    <SolidColorBrush x:Key="KeyHoverBrush" Color="#FDF8F2" />
-    <SolidColorBrush x:Key="KeyPressedBrush" Color="#F5EADC" />
-    <SolidColorBrush x:Key="FunctionKeyBackgroundBrush" Color="#FAF3EB" />
-    <SolidColorBrush x:Key="FunctionKeyHoverBrush" Color="#F4E9DB" />
-    <SolidColorBrush x:Key="MemoryKeyBackgroundBrush" Color="#EBDCC8" />
-    <SolidColorBrush x:Key="AccentBrush" Color="#8B5A2B" />
-    <SolidColorBrush x:Key="AccentHoverBrush" Color="#A26B38" />
-    <SolidColorBrush x:Key="AccentPressedBrush" Color="#74491F" />
-    <SolidColorBrush x:Key="AccentForegroundBrush" Color="#FFFFFF" />
-    <SolidColorBrush x:Key="ErrorBrush" Color="#C62828" />
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
+    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FBF5EE" po:Freeze="True" />
+    <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF" po:Freeze="True" />
+    <SolidColorBrush x:Key="SurfaceAltBrush" Color="#F3E8DA" po:Freeze="True" />
+    <SolidColorBrush x:Key="DisplayBackgroundBrush" Color="#FFFFFF" po:Freeze="True" />
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#33261A" po:Freeze="True" />
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#6F5D4B" po:Freeze="True" />
+    <SolidColorBrush x:Key="BorderBrush" Color="#E4D2BC" po:Freeze="True" />
+    <SolidColorBrush x:Key="KeyBackgroundBrush" Color="#FFFFFF" po:Freeze="True" />
+    <SolidColorBrush x:Key="KeyHoverBrush" Color="#FDF8F2" po:Freeze="True" />
+    <SolidColorBrush x:Key="KeyPressedBrush" Color="#F5EADC" po:Freeze="True" />
+    <SolidColorBrush x:Key="FunctionKeyBackgroundBrush" Color="#FAF3EB" po:Freeze="True" />
+    <SolidColorBrush x:Key="FunctionKeyHoverBrush" Color="#F4E9DB" po:Freeze="True" />
+    <SolidColorBrush x:Key="MemoryKeyBackgroundBrush" Color="#EBDCC8" po:Freeze="True" />
+    <SolidColorBrush x:Key="AccentBrush" Color="#8B5A2B" po:Freeze="True" />
+    <SolidColorBrush x:Key="AccentHoverBrush" Color="#A26B38" po:Freeze="True" />
+    <SolidColorBrush x:Key="AccentPressedBrush" Color="#74491F" po:Freeze="True" />
+    <SolidColorBrush x:Key="AccentForegroundBrush" Color="#FFFFFF" po:Freeze="True" />
+    <SolidColorBrush x:Key="ErrorBrush" Color="#C62828" po:Freeze="True" />
 </ResourceDictionary>

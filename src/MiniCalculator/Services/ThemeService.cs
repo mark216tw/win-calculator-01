@@ -14,6 +14,7 @@ public sealed class ThemeService : IThemeService, IDisposable
     private readonly ISettingsService _settings;
     private readonly ILogger<ThemeService> _logger;
     private ResourceDictionary? _current;
+    private bool _watchingSystemTheme;
     private bool _disposed;
 
     public ThemeService(ISettingsService settings, ILogger<ThemeService> logger)
@@ -21,7 +22,17 @@ public sealed class ThemeService : IThemeService, IDisposable
         _settings = settings;
         _logger = logger;
         _settings.Current.PropertyChanged += OnSettingsChanged;
+    }
+
+    public void StartWatchingSystemTheme()
+    {
+        if (_disposed || _watchingSystemTheme || _settings.Current.DisplayMode != DisplayMode.System)
+        {
+            return;
+        }
+
         SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
+        _watchingSystemTheme = true;
     }
 
     public void Apply()
@@ -80,6 +91,11 @@ public sealed class ThemeService : IThemeService, IDisposable
     {
         if (e.PropertyName is nameof(AppSettings.DisplayMode) or nameof(AppSettings.Theme))
         {
+            if (e.PropertyName == nameof(AppSettings.DisplayMode))
+            {
+                StartWatchingSystemTheme();
+            }
+
             Apply();
         }
     }
@@ -107,6 +123,10 @@ public sealed class ThemeService : IThemeService, IDisposable
 
         _disposed = true;
         _settings.Current.PropertyChanged -= OnSettingsChanged;
-        SystemEvents.UserPreferenceChanged -= OnUserPreferenceChanged;
+        if (_watchingSystemTheme)
+        {
+            SystemEvents.UserPreferenceChanged -= OnUserPreferenceChanged;
+            _watchingSystemTheme = false;
+        }
     }
 }

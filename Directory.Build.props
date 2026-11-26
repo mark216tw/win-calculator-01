@@ -9,9 +9,9 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisMode>Recommended</AnalysisMode>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <Version>1.6.1</Version>
+    <Version>1.6.2</Version>
     <AssemblyVersion>1.6.0.0</AssemblyVersion>
-    <FileVersion>1.6.1.0</FileVersion>
+    <FileVersion>1.6.2.0</FileVersion>
     <Company>MiniCalculator</Company>
     <Product>mini計算機</Product>
     <Authors>MiniCalculator</Authors>

@@ -1,4 +1,5 @@
 using System.IO;
+using System.Runtime;
 using System.Windows;
 using System.Windows.Threading;
 using Com.MiniCalculator.Services;
@@ -11,10 +12,18 @@ using Localization = Com.MiniCalculator.Helpers.Localization;
 
 namespace Com.MiniCalculator;
 
-public partial class App : Application
+public sealed partial class App : Application, IDisposable
 {
     private IHost? _host;
-    private ISingleInstanceService? _singleInstance;
+    private SingleInstanceService? _singleInstance;
+    private Task? _hostStartTask;
+    private bool _isExiting;
+    private bool _disposed;
+
+    public App()
+    {
+        EnableStartupProfile();
+    }
 
     public static IServiceProvider? Services { get; private set; }
 
@@ -22,54 +31,111 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
+        _singleInstance = new SingleInstanceService();
+        if (!_singleInstance.TryAcquire())
+        {
+            _singleInstance.Dispose();
+            _singleInstance = null;
+            Shutdown();
+            return;
+        }
+
         AppDomain.CurrentDomain.UnhandledException += OnDomainUnhandledException;
         DispatcherUnhandledException += OnDispatcherUnhandledException;
         TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
 
-        _host = CreateHost();
-        _host.Start();
+        _host = CreateHost(_singleInstance);
         Services = _host.Services;
-
-        _singleInstance = Services.GetRequiredService<ISingleInstanceService>();
-        if (!_singleInstance.TryAcquire())
-        {
-            Shutdown();
-            return;
-        }
+        _singleInstance.AttachLogger(Services.GetRequiredService<ILogger<SingleInstanceService>>());
 
         IThemeService theme = Services.GetRequiredService<IThemeService>();
         theme.Apply();
 
         var main = Services.GetRequiredService<MainWindow>();
         MainWindow = main;
-        _singleInstance.StartListening(() => Dispatcher.Invoke(main.ShowAndActivate));
 
         main.Show();
+
+        Dispatcher.BeginInvoke(
+            () => CompletePostShowInitialization(main, theme),
+            DispatcherPriority.ApplicationIdle);
+    }
+
+    private void CompletePostShowInitialization(MainWindow main, IThemeService theme)
+    {
+        if (_isExiting)
+        {
+            return;
+        }
+
+        _singleInstance?.StartListening(() => Dispatcher.Invoke(main.ShowAndActivate));
+        theme.StartWatchingSystemTheme();
+
+        if (_host is not null)
+        {
+            _hostStartTask = _host.StartAsync();
+        }
     }
 
     protected override void OnExit(ExitEventArgs e)
     {
+        _isExiting = true;
+        Dispose();
+        base.OnExit(e);
+    }
+
+    public void Dispose()
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        _disposed = true;
         _singleInstance?.Dispose();
+        _singleInstance = null;
 
         if (_host is not null)
         {
-            try
+            if (_hostStartTask is not null)
             {
-                _host.StopAsync(TimeSpan.FromSeconds(2)).GetAwaiter().GetResult();
-            }
-            catch (Exception ex)
-            {
-                LogException(ex);
+                try
+                {
+                    _hostStartTask.GetAwaiter().GetResult();
+                    _host.StopAsync(TimeSpan.FromSeconds(2)).GetAwaiter().GetResult();
+                }
+                catch (Exception ex)
+                {
+                    LogException(ex);
+                }
             }
 
             _host.Dispose();
             _host = null;
         }
-
-        base.OnExit(e);
     }
 
-    private static IHost CreateHost()
+    private static void EnableStartupProfile()
+    {
+        try
+        {
+            string profileDirectory = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "MiniCalculator",
+                "StartupProfile");
+            Directory.CreateDirectory(profileDirectory);
+            ProfileOptimization.SetProfileRoot(profileDirectory);
+            ProfileOptimization.StartProfile("Startup.profile");
+        }
+        catch (IOException)
+        {
+        }
+        catch (UnauthorizedAccessException)
+        {
+        }
+    }
+
+    private static IHost CreateHost(ISingleInstanceService singleInstance)
     {
         HostApplicationBuilder builder = Host.CreateEmptyApplicationBuilder(new HostApplicationBuilderSettings
         {
@@ -89,7 +155,7 @@ public partial class App : Application
         builder.Services.AddSingleton<IHistoryService, HistoryService>();
         builder.Services.AddSingleton<ISettingsService, SettingsService>();
         builder.Services.AddSingleton<IThemeService, ThemeService>();
-        builder.Services.AddSingleton<ISingleInstanceService, SingleInstanceService>();
+        builder.Services.AddSingleton<ISingleInstanceService>(singleInstance);
         builder.Services.AddSingleton<CalculatorViewModel>();
         builder.Services.AddSingleton<ShellViewModel>();
         builder.Services.AddTransient<AboutViewModel>();

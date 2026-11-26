@@ -45,7 +45,6 @@ public partial class MainWindow : Window
 
         DataContext = shell;
         InitializeComponent();
-        RegisterShortcuts();
         ApplyNormalLayout(focusInput: false);
         _shell.PropertyChanged += OnShellPropertyChanged;
 
@@ -97,6 +96,7 @@ public partial class MainWindow : Window
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
         Loaded -= OnLoaded;
+        RegisterShortcuts();
         Dispatcher.BeginInvoke(new Action(FocusActiveInput), DispatcherPriority.Input);
     }
 

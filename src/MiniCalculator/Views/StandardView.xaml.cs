@@ -16,8 +16,6 @@ public partial class StandardView : UserControl
 
     public void FocusInput() => FocusExpression();
 
-    private void OnViewLoaded(object sender, RoutedEventArgs e) => FocusExpression();
-
     private void OnExpressionSelectionChanged(object sender, RoutedEventArgs e)
     {
         if (DataContext is CalculatorViewModel viewModel)

@@ -7,17 +7,19 @@ public sealed class SingleInstanceService : ISingleInstanceService
     private const string MutexName = @"Local\MiniCalculator.SingleInstance.7F1C";
     private const string ActivationEventName = @"Local\MiniCalculator.SingleInstance.Event.7F1C";
 
-    private readonly ILogger<SingleInstanceService> _logger;
+    private ILogger<SingleInstanceService>? _logger;
     private Mutex? _mutex;
     private EventWaitHandle? _activationEvent;
     private RegisteredWaitHandle? _registeredWait;
     private Action? _onSecondInstance;
     private bool _disposed;
 
-    public SingleInstanceService(ILogger<SingleInstanceService> logger)
+    public SingleInstanceService(ILogger<SingleInstanceService>? logger = null)
     {
         _logger = logger;
     }
+
+    public void AttachLogger(ILogger<SingleInstanceService> logger) => _logger = logger;
 
     public bool TryAcquire()
     {
@@ -40,7 +42,11 @@ public sealed class SingleInstanceService : ISingleInstanceService
         }
         catch (Exception ex)
         {
-            LogMessages.MutexCreateFailed(_logger, ex);
+            if (_logger is not null)
+            {
+                LogMessages.MutexCreateFailed(_logger, ex);
+            }
+
             return true;
         }
     }
@@ -69,7 +75,10 @@ public sealed class SingleInstanceService : ISingleInstanceService
         }
         catch (Exception ex)
         {
-            LogMessages.WindowActivationFailed(_logger, ex);
+            if (_logger is not null)
+            {
+                LogMessages.WindowActivationFailed(_logger, ex);
+            }
         }
     }
 
@@ -89,7 +98,11 @@ public sealed class SingleInstanceService : ISingleInstanceService
             }
             catch (UnauthorizedAccessException ex)
             {
-                LogMessages.SignalExistingFailed(_logger, ex);
+                if (_logger is not null)
+                {
+                    LogMessages.SignalExistingFailed(_logger, ex);
+                }
+
                 return;
             }
         }

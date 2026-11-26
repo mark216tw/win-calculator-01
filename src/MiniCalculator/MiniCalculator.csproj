@@ -6,9 +6,11 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <RootNamespace>Com.MiniCalculator</RootNamespace>
     <AssemblyName>MiniCalculator</AssemblyName>
+    <NeutralLanguage>zh-Hant</NeutralLanguage>
     <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
     <PlatformTarget Condition="'$(RuntimeIdentifier)' == '' or '$(RuntimeIdentifier)' == 'win-x64'">x64</PlatformTarget>
     <PlatformTarget Condition="'$(RuntimeIdentifier)' == 'win-arm64'">arm64</PlatformTarget>
+    <PublishReadyToRun Condition="'$(Configuration)' == 'Release'">true</PublishReadyToRun>
   </PropertyGroup>
 
   <ItemGroup>

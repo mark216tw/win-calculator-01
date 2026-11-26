@@ -13,9 +13,9 @@ public sealed class JsonFileStore<T> : IDisposable
     private readonly string? _directory;
     private readonly JsonTypeInfo<T> _typeInfo;
     private readonly ILogger _logger;
-    private readonly Timer _timer;
     private readonly object _pendingGate = new();
     private readonly object _writeGate = new();
+    private Timer? _timer;
     private string? _pendingJson;
     private bool _disposed;
 
@@ -25,7 +25,6 @@ public sealed class JsonFileStore<T> : IDisposable
         _directory = Path.GetDirectoryName(path);
         _typeInfo = typeInfo;
         _logger = logger;
-        _timer = new Timer(OnTimerElapsed, null, Timeout.Infinite, Timeout.Infinite);
     }
 
     public T? Load()
@@ -67,17 +66,25 @@ public sealed class JsonFileStore<T> : IDisposable
 
         lock (_pendingGate)
         {
-            _pendingJson = json;
-        }
+            if (_disposed)
+            {
+                return;
+            }
 
-        _timer.Change(DebounceDelay, Timeout.InfiniteTimeSpan);
+            _pendingJson = json;
+            _timer ??= new Timer(OnTimerElapsed, null, Timeout.Infinite, Timeout.Infinite);
+            _timer.Change(DebounceDelay, Timeout.InfiniteTimeSpan);
+        }
     }
 
     public void Flush()
     {
-        if (!_disposed)
+        lock (_pendingGate)
         {
-            _timer.Change(Timeout.Infinite, Timeout.Infinite);
+            if (!_disposed)
+            {
+                _timer?.Change(Timeout.Infinite, Timeout.Infinite);
+            }
         }
 
         string? json = TakePending();
@@ -130,13 +137,20 @@ public sealed class JsonFileStore<T> : IDisposable
 
     public void Dispose()
     {
-        if (_disposed)
+        Timer? timer;
+        lock (_pendingGate)
         {
-            return;
+            if (_disposed)
+            {
+                return;
+            }
+
+            _disposed = true;
+            timer = _timer;
+            _timer = null;
         }
 
-        _disposed = true;
-        _timer.Dispose();
+        timer?.Dispose();
         Flush();
     }
 }

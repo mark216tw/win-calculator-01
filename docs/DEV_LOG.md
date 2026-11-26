@@ -4,6 +4,36 @@
 
 ---
 
+## 2026-11-26 - v1.6.2（啟動速度優化）
+
+### 目標
+進一步縮短應用程式啟動到主視窗可互動的時間，並為 Release 發佈加入 ReadyToRun 預編譯，同時加速第二次啟動喚醒既有視窗的速度。
+
+### 變更
+- `App.xaml.cs`：
+  - 於建構子啟用多核心 JIT（`ProfileOptimization`），將啟動設定檔保存於 `%LocalAppData%\MiniCalculator\StartupProfile\Startup.profile`。
+  - 單一實例檢查移至 `CreateHost()` 之前，重複開啟時直接喚醒原視窗並結束，不再初始化 DI／Host／日誌。
+  - `_host.StartAsync()`、單一實例監聽與系統主題變更訂閱延後至 `MainWindow.Show()` 後於 `DispatcherPriority.ApplicationIdle` 執行。
+- `Services/ISingleInstanceService.cs`、`Services/SingleInstanceService.cs`：支援延後附加 `ILogger`，讓單一實例鎖定可早於 Host 建立。
+- `Services/IThemeService.cs`、`Services/ThemeService.cs`：移除建構時同步訂閱 `SystemEvents.UserPreferenceChanged`，改為視窗顯示後且僅在「跟隨系統」模式時延後訂閱。
+- `Services/JsonFileStore.cs`：背景儲存用的 `Timer` 改為首次 `RequestSave` 時才建立，啟動不再預先配置計時器。
+- `Styles/Themes/*.xaml`（24 檔）、`Styles/ThemeSwatches.xaml`：所有 `SolidColorBrush` 加上 `po:Freeze="True"` 凍結筆刷，減少變更追蹤與繪製開銷。
+- `Styles/Controls.xaml`、新增 `Styles/SettingsControls.xaml`、`Views/SettingsWindow.xaml`、`Views/HistoryWindow.xaml`、`Views/ScientificView.xaml`：將僅於設定視窗、歷史視窗與科學模式使用的 7 個樣式移出啟動共用字典；並將 `AccentKeyButton`、`PinToggle`、`SegmentOption`、`KeyToggleButton` 範本改用 `ContentPresenter` 取代 `TemplatedParent` 繫結。
+- `Views/MainWindow.xaml.cs`、`Views/StandardView.xaml(.cs)`、`Views/ScientificView.xaml(.cs)`：移除啟動時重複的 `OnViewLoaded` 焦點設定；快捷鍵註冊延後至 `MainWindow.Loaded`。
+- `src/MiniCalculator/MiniCalculator.csproj`：設定 `<NeutralLanguage>zh-Hant</NeutralLanguage>` 避免啟動時探測附屬語系組件；設定 Release 建置啟用 `PublishReadyToRun`。
+- `Directory.Build.props`：版本提升至 1.6.2（`AssemblyVersion` 維持 1.6.0.0）。
+- 同步更新 `CHANGELOG.md`、`RELEASE_NOTES.md`。
+
+### 問題與解法
+- `App` 直接建立 `SingleInstanceService` 觸發 `CA1001` 與 `CA1859` → 將 `App` 改為 `sealed` 並實作 `IDisposable`，欄位改用具體型別 `SingleInstanceService?`。
+- 實機以 `Stopwatch` 分段量測顯示：`ProfileOptimization` 產生 104 KB `Startup.profile` 後，後續啟動在 `Host`、`Theme+Settings` 與 `Show->Rendered` 階段皆有明顯下降；對照有無 `ProfileOptimization` 的 7 次 `WaitForInputIdle` 中位數（878 ms vs 1015 ms）亦確認多核心 JIT 具實質效益。
+
+### 待辦／已知限制
+- 本次依規範僅執行 Debug 建置與測試；Release 的 `PublishReadyToRun` 將於下次明確要求發佈時驗證。
+- 尚未建立 MSIX 安裝封裝。
+
+---
+
 ## 2026-11-26 - v1.6.1（極小模式再縮小）
 
 ### 目標
